@@ -5,7 +5,7 @@ var apiService = new ApiService();
 
 var loginSuccess = true;
 
-await apiService.Login("jcox@winsor.edu", "not my password",
+await apiService.Login("ila.desai@winsor.edu", "NFK&&#laj631",
     err =>
     {
         Console.WriteLine(err);
@@ -15,8 +15,13 @@ await apiService.Login("jcox@winsor.edu", "not my password",
 if(!loginSuccess)
     return;
     
-Console.WriteLine($"jwt: {apiService.AuthorizedUser?.jwt}");
+var assesments = await apiService.SendAsync<AssesmentCalendar[]>(HttpMethod.Get,"api/assessment-calendar?", err =>
+{
+    Console.WriteLine(err);
+    loginSuccess = false;
+});
 
-var b64String = Convert.FromBase64String(apiService.AuthorizedUser?.jwt ?? "");
-
-Console.WriteLine(b64String);
+foreach (var assesment in assesments)
+{
+    Console.WriteLine(assesment);
+}
